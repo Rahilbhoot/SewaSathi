@@ -1,4 +1,4 @@
-# KaamSathi 🛠️
+# SewaSathi 🛠️
 ### A Cooperative-Owned Gig Services Platform for Household & Community Services
 
 > *"Urban Company, but the workers own it."*
