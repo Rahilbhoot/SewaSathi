@@ -3,12 +3,20 @@ const cors = require('cors');
 require('dotenv').config();
 const connectDB = require('./config/db');
 
+const workerRoutes = require('./routes/workerRoutes');
+const customerRoutes = require('./routes/customerRoutes');
+const bookingRoutes = require('./routes/bookingRoutes');
+
 connectDB();
 
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+app.use('/api/workers', workerRoutes);
+app.use('/api/customers', customerRoutes);
+app.use('/api/bookings', bookingRoutes);
 
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'OK', message: 'Cooperative Gig Platform API Running' });
