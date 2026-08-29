@@ -6,6 +6,7 @@ const connectDB = require('./config/db');
 const workerRoutes = require('./routes/workerRoutes');
 const customerRoutes = require('./routes/customerRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
+const aiRoutes = require('./routes/aiRoutes');
 
 connectDB();
 
@@ -17,6 +18,7 @@ app.use(express.json());
 app.use('/api/workers', workerRoutes);
 app.use('/api/customers', customerRoutes);
 app.use('/api/bookings', bookingRoutes);
+app.use('/api/ai', aiRoutes);
 
 app.get('/health', (req, res) => {
     res.status(200).json({ status: 'OK', message: 'Cooperative Gig Platform API Running' });
