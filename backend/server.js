@@ -32,5 +32,13 @@ app.get('/health', (req, res) => {
     res.status(200).json({ status: 'OK' });
 });
 
+// Handle malformed JSON body errors
+app.use((err, req, res, next) => {
+    if (err instanceof SyntaxError && err.status === 400 && 'body' in err) {
+        return res.status(400).json({ error: 'Invalid or malformed JSON payload' });
+    }
+    next(err);
+});
+
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
