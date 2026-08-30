@@ -13,7 +13,6 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@google/genai": "^2.18.0",
     "argon2": "^0.45.1",
     "cors": "^2.8.6",
     "dotenv": "^17.4.2",
@@ -21,6 +20,7 @@
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.6.0",
     "mongoose": "^9.9.3",
+    "ollama": "^0.6.3",
     "pdfkit": "^0.20.2",
     "razorpay": "^2.9.8"
   },

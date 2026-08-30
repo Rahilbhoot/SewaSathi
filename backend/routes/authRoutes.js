@@ -20,7 +20,7 @@ router.post('/register', async (req, res) => {
         } else if (role === 'worker') {
             const exists = await Worker.findOne({ phone });
             if (exists) return res.status(400).json({ error: 'Worker already exists' });
-            user = await Worker.create({ name, phone, password, skills, location, role });
+            user = await Worker.create({ name, phone, password, skills, location, address, role });
         } else {
             return res.status(400).json({ error: 'Invalid role' });
         }
@@ -30,6 +30,8 @@ router.post('/register', async (req, res) => {
             name: user.name,
             phone: user.phone,
             role: user.role,
+            address: user.address,
+            skills: user.skills,
             token: generateToken(user._id, user.role)
         });
     } catch (error) {
@@ -63,6 +65,8 @@ router.post('/login', async (req, res) => {
                 name: user.name,
                 phone: user.phone,
                 role: user.role,
+                address: user.address,
+                skills: user.skills,
                 token: generateToken(user._id, user.role)
             });
         } else {

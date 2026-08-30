@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Worker = require('../models/Worker');
+const { protect, authorize } = require('../middleware/authMiddleware');
 
 router.post('/', async (req, res) => {
     try {
@@ -43,6 +44,19 @@ router.get('/', async (req, res) => {
         res.json(workers)
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+});
+
+router.patch('/:id/verify', protect, authorize('admin'), async (req, res) => {
+    try {
+        const worker = await Worker.findByIdAndUpdate(
+            req.params.id,
+            { isVerified: true },
+            { new: true }
+        );
+        res.json(worker);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
 });
 

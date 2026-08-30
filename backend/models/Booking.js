@@ -7,6 +7,8 @@ const BookingSchema = new mongoose.Schema({
     status: { type: String, enum: ['pending', 'assigned', 'completed'], default: 'pending' },
     assignedByAI: { type: Boolean, default: false },
     amount: { type: Number, default: 500 },
+    notes: { type: String },
+    scheduledAt: { type: Date },
     orderId: { type: String },
     paymentId: { type: String },
     createdAt: { type: Date, default: Date.now },

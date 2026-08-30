@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const { protect } = require('../middleware/authMiddleware');
 
-// Mock Welfare API (e-Shram Government Scheme Lookup)
 
 router.post('/check-status', async (req, res) => {
     try {
@@ -63,7 +62,6 @@ router.get('/', async (req, res) => {
 
 module.exports = router;
 
-// Allow running directly as standalone script: `node routes/welfareRoutes.js`
 if (require.main === module) {
     require('dotenv').config({ path: require('path').join(__dirname, '../.env') });
     const app = express();

@@ -6,6 +6,7 @@ const WorkerSchema = new mongoose.Schema({
     phone: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, default: 'worker' }, // <-- THIS MUST BE HERE
+    address: { type: String, required: true },
     skills: [{ type: String }],
     isVerified: { type: Boolean, default: false },
     location: {

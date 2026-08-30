@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const Booking = require('../models/Booking');
+const Worker = require('../models/Worker');
 const { protect, authorize } = require('../middleware/authMiddleware');
 
 router.post('/', protect, authorize('customer'), async (req, res) => {
@@ -9,6 +10,37 @@ router.post('/', protect, authorize('customer'), async (req, res) => {
             ...req.body,
             customer: req.user._id
         });
+
+        // Auto-assign logic for manual bookings
+        // Convert to lowercase to match the database skills array format
+        const query = {
+            isVerified: true,
+            skills: (req.body.serviceRequired || "").toLowerCase()
+        };
+        
+        // Find nearest worker first, matching AI logic
+        if (req.user.location && req.user.location.coordinates) {
+            query.location = {
+                $near: {
+                    $geometry: { 
+                        type: "Point", 
+                        coordinates: req.user.location.coordinates 
+                    },
+                    $maxDistance: 15000
+                }
+            };
+        }
+
+        const bestWorker = await Worker.findOne(query).sort({ weeklyBookings: 1 });
+
+        if (bestWorker) {
+            booking.worker = bestWorker._id;
+            booking.status = 'assigned';
+            
+            bestWorker.weeklyBookings += 1;
+            await bestWorker.save();
+        }
+
         await booking.save();
         res.status(201).json(booking);
     } catch (error) {

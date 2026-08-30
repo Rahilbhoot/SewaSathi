@@ -1,0 +1,361 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * SewaSathi design system — trustworthy government-cooperative palette.
+ * Deep institutional blue, clean white surfaces, cool neutral grays,
+ * plus a welfare-green accent for entitlement/insurance states.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary-soft: var(--primary-soft);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-success-soft: var(--success-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --shadow-card: 0 1px 3px oklch(0.35 0.06 255 / 0.06), 0 8px 24px oklch(0.35 0.06 255 / 0.08);
+  --shadow-lift: 0 12px 32px oklch(0.35 0.06 255 / 0.14);
+  --shadow-glow: 0 0 20px oklch(0.48 0.15 258 / 0.25);
+}
+
+:root {
+  --radius: 0.75rem;
+  --background: oklch(0.985 0.005 250);
+  --foreground: oklch(0.22 0.03 255);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.22 0.03 255);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.22 0.03 255);
+  --primary: oklch(0.48 0.15 258);
+  --primary-foreground: oklch(0.99 0.005 250);
+  --primary-soft: oklch(0.95 0.03 258);
+  --secondary: oklch(0.96 0.012 250);
+  --secondary-foreground: oklch(0.3 0.04 258);
+  --muted: oklch(0.96 0.008 250);
+  --muted-foreground: oklch(0.53 0.025 255);
+  --accent: oklch(0.93 0.04 250);
+  --accent-foreground: oklch(0.32 0.06 258);
+  --success: oklch(0.55 0.15 152);
+  --success-foreground: oklch(0.99 0.005 150);
+  --success-soft: oklch(0.94 0.05 152);
+  --warning: oklch(0.72 0.15 72);
+  --warning-soft: oklch(0.95 0.05 80);
+  --destructive: oklch(0.55 0.2 25);
+  --destructive-foreground: oklch(0.99 0.005 250);
+  --border: oklch(0.9 0.012 250);
+  --input: oklch(0.9 0.012 250);
+  --ring: oklch(0.48 0.15 258);
+  --sidebar: oklch(0.27 0.06 258);
+  --sidebar-foreground: oklch(0.95 0.01 250);
+  --sidebar-accent: oklch(0.35 0.08 258);
+  --sidebar-border: oklch(0.38 0.06 258);
+  --chart-1: oklch(0.48 0.15 258);
+  --chart-2: oklch(0.62 0.13 235);
+  --chart-3: oklch(0.55 0.15 152);
+  --chart-4: oklch(0.72 0.15 72);
+  --chart-5: oklch(0.6 0.11 285);
+}
+
+.dark {
+  --background: oklch(0.19 0.03 258);
+  --foreground: oklch(0.96 0.008 250);
+  --card: oklch(0.24 0.035 258);
+  --card-foreground: oklch(0.96 0.008 250);
+  --popover: oklch(0.24 0.035 258);
+  --popover-foreground: oklch(0.96 0.008 250);
+  --primary: oklch(0.68 0.13 255);
+  --primary-foreground: oklch(0.18 0.03 258);
+  --primary-soft: oklch(0.32 0.06 258);
+  --secondary: oklch(0.3 0.04 258);
+  --secondary-foreground: oklch(0.96 0.008 250);
+  --muted: oklch(0.3 0.035 258);
+  --muted-foreground: oklch(0.72 0.02 255);
+  --accent: oklch(0.33 0.05 258);
+  --accent-foreground: oklch(0.96 0.008 250);
+  --success: oklch(0.68 0.14 152);
+  --success-foreground: oklch(0.18 0.03 150);
+  --success-soft: oklch(0.3 0.06 152);
+  --warning: oklch(0.78 0.14 75);
+  --warning-soft: oklch(0.32 0.06 75);
+  --destructive: oklch(0.65 0.19 25);
+  --destructive-foreground: oklch(0.98 0.005 250);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.68 0.13 255);
+  --sidebar: oklch(0.22 0.04 258);
+  --sidebar-foreground: oklch(0.95 0.01 250);
+  --sidebar-accent: oklch(0.32 0.06 258);
+  --sidebar-border: oklch(1 0 0 / 12%);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* ─── Surface cards ─── */
+@utility surface-card {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+@utility surface-card-hover {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+
+  &:hover {
+    box-shadow: var(--shadow-lift);
+    transform: translateY(-2px);
+    border-color: var(--ring);
+  }
+}
+
+/* ─── Glass card (for login/register overlays) ─── */
+@utility glass-card {
+  background: oklch(1 0 0 / 80%);
+  backdrop-filter: blur(16px) saturate(1.8);
+  border: 1px solid oklch(1 0 0 / 40%);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-lift);
+}
+
+.dark .glass-card {
+  background: oklch(0.24 0.035 258 / 70%);
+  border-color: oklch(1 0 0 / 10%);
+}
+
+/* ─── Gradient backgrounds ─── */
+@utility gradient-hero {
+  background: linear-gradient(135deg, oklch(0.48 0.15 258) 0%, oklch(0.55 0.12 280) 40%, oklch(0.55 0.15 152) 100%);
+}
+
+@utility gradient-hero-soft {
+  background: linear-gradient(135deg, oklch(0.95 0.03 258) 0%, oklch(0.96 0.02 280) 50%, oklch(0.96 0.03 152) 100%);
+}
+
+@utility gradient-sidebar {
+  background: linear-gradient(180deg, oklch(0.27 0.06 258) 0%, oklch(0.22 0.08 265) 100%);
+}
+
+/* ─── Input fields ─── */
+@utility field-input {
+  width: 100%;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--input);
+  background-color: var(--card);
+  padding: 0.7rem 0.85rem;
+  font-size: 0.95rem;
+  color: var(--foreground);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    border-color: var(--ring);
+    box-shadow: 0 0 0 3px oklch(0.48 0.15 258 / 0.15);
+  }
+
+  &::placeholder {
+    color: var(--muted-foreground);
+    opacity: 0.7;
+  }
+}
+
+/* ─── Buttons ─── */
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-md);
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  padding: 0.7rem 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    filter: brightness(1.08);
+    box-shadow: 0 4px 12px oklch(0.48 0.15 258 / 0.3);
+  }
+  &:active {
+    transform: translateY(1px);
+  }
+  &:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+@utility btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background-color: var(--card);
+  color: var(--foreground);
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+
+  &:hover {
+    background-color: var(--muted);
+    border-color: var(--muted-foreground);
+  }
+  &:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+@utility btn-success {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-md);
+  background-color: var(--success);
+  color: var(--success-foreground);
+  padding: 0.8rem 1.1rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: filter 0.15s ease, box-shadow 0.15s ease;
+
+  &:hover {
+    filter: brightness(1.06);
+    box-shadow: 0 4px 12px oklch(0.55 0.15 152 / 0.3);
+  }
+  &:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+@utility btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-md);
+  background-color: transparent;
+  color: var(--muted-foreground);
+  padding: 0.6rem 1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background-color: var(--muted);
+    color: var(--foreground);
+  }
+  &:disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+/* ─── Animations ─── */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@utility animate-fade-in-up {
+  animation: fade-in-up 0.4s ease-out both;
+}
+
+@utility animate-pulse-soft {
+  animation: pulse-soft 2s ease-in-out infinite;
+}
+
+/* ─── Stagger children (for service cards, etc.) ─── */
+@utility stagger-children {
+  & > * {
+    animation: fade-in-up 0.35s ease-out both;
+  }
+  & > *:nth-child(1) { animation-delay: 0ms; }
+  & > *:nth-child(2) { animation-delay: 50ms; }
+  & > *:nth-child(3) { animation-delay: 100ms; }
+  & > *:nth-child(4) { animation-delay: 150ms; }
+  & > *:nth-child(5) { animation-delay: 200ms; }
+  & > *:nth-child(6) { animation-delay: 250ms; }
+  & > *:nth-child(7) { animation-delay: 300ms; }
+  & > *:nth-child(8) { animation-delay: 350ms; }
+}
