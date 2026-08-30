@@ -15,6 +15,7 @@ const seedData = async () => {
             {
                 name: "Ramesh Sharma",
                 phone: "9876543210",
+                password: "password123",
                 skills: ["electrician", "appliance_repair"],
                 isVerified: true,
                 location: { type: "Point", coordinates: [73.8567, 18.5204] },
@@ -24,6 +25,7 @@ const seedData = async () => {
             {
                 name: "Suresh Patil",
                 phone: "9876543211",
+                password: "password123",
                 skills: ["plumber", "cleaner"],
                 isVerified: true,
                 location: { type: "Point", coordinates: [73.8520, 18.5250] },
@@ -33,6 +35,7 @@ const seedData = async () => {
             {
                 name: "Anil Kumar",
                 phone: "9876543212",
+                password: "password123",
                 skills: ["electrician"],
                 isVerified: true,
                 location: { type: "Point", coordinates: [73.8600, 18.5180] },
@@ -44,6 +47,7 @@ const seedData = async () => {
         const customer = await Customer.create({
             name: "Priya Singh",
             phone: "9123456789",
+            password: "password123",
             address: "Flat 402, Sunshine Heights, Ward 12",
             location: { type: "Point", coordinates: [73.8550, 18.5210] }
         });

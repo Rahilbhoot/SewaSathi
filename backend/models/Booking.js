@@ -6,7 +6,11 @@ const BookingSchema = new mongoose.Schema({
     serviceRequired: { type: String, required: true },
     status: { type: String, enum: ['pending', 'assigned', 'completed'], default: 'pending' },
     assignedByAI: { type: Boolean, default: false },
-    createdAt: { type: Date, default: Date.now }
+    amount: { type: Number, default: 500 },
+    orderId: { type: String },
+    paymentId: { type: String },
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('Booking', BookingSchema);
