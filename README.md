@@ -39,7 +39,7 @@ Yet this workforce has **no digital storefront**. Meanwhile, private platforms (
 
 ## 💡 Our Solution
 
-**KaamSathi** is a marketplace app, owned by the cooperative, where verified cooperative workers get booked by households and institutions for services — with fair pay, welfare benefits, and consumer trust built in from the start.
+**SewaSathi** is a marketplace app, owned by the cooperative, where verified cooperative workers get booked by households and institutions for services — with fair pay, welfare benefits, and consumer trust built in from the start.
 
 Unlike private gig platforms, the cooperative itself is the platform owner. Revenue collected is reinvested into worker welfare (insurance, fair-wage enforcement) and platform upkeep — not extracted as private profit.
 
