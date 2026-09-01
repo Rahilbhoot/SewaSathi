@@ -11,38 +11,34 @@ router.post('/', protect, authorize('customer'), async (req, res) => {
             customer: req.user._id
         });
 
-        // Auto-assign logic for manual bookings
-        // Convert to lowercase to match the database skills array format
-        const query = {
-            isVerified: true,
-            skills: (req.body.serviceRequired || "").toLowerCase()
-        };
-        
-        // Find nearest worker first, matching AI logic
-        if (req.user.location && req.user.location.coordinates) {
-            query.location = {
-                $near: {
-                    $geometry: { 
-                        type: "Point", 
-                        coordinates: req.user.location.coordinates 
-                    },
-                    $maxDistance: 15000
-                }
-            };
-        }
-
-        const bestWorker = await Worker.findOne(query).sort({ weeklyBookings: 1 });
-
-        if (bestWorker) {
-            booking.worker = bestWorker._id;
-            booking.status = 'assigned';
-            
-            bestWorker.weeklyBookings += 1;
-            await bestWorker.save();
-        }
-
         await booking.save();
         res.status(201).json(booking);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
+
+router.patch('/:id/assign', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { workerId } = req.body;
+        const booking = await Booking.findById(req.params.id);
+        if (!booking) {
+            return res.status(404).json({ error: 'Booking not found' });
+        }
+
+        const worker = await Worker.findById(workerId);
+        if (!worker) {
+            return res.status(404).json({ error: 'Worker not found' });
+        }
+
+        booking.worker = workerId;
+        booking.status = 'assigned';
+        await booking.save();
+
+        worker.weeklyBookings = (worker.weeklyBookings || 0) + 1;
+        await worker.save();
+
+        res.json(booking);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }

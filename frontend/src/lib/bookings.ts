@@ -18,7 +18,7 @@ export type Booking = {
   paymentId?: string;
   customerName?: string;
   workerName?: string;
-  customer?: { _id?: string; name?: string; phone?: string; address?: string };
+  customer?: { _id?: string; name?: string; phone?: string; address?: string; location?: { coordinates?: [number, number] } };
   worker?: { _id?: string; name?: string; phone?: string; skills?: string[]; rating?: number };
 };
 

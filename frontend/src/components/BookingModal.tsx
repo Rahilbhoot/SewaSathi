@@ -80,6 +80,18 @@ export function BookingModal({
             />
           </label>
 
+          <div className="rounded-lg bg-primary-soft/50 p-3 border border-primary/20 flex items-start gap-2">
+            <span className="text-primary mt-0.5">₹</span>
+            <div>
+              <p className="text-sm font-semibold text-primary">Consultant Fee: ₹500</p>
+              <p className="text-xs text-primary/80 mt-0.5">
+                {lang === "hi" 
+                  ? "बुकिंग के लिए शुरुआती ₹500 का शुल्क देना होगा।" 
+                  : "An initial consultant fee of ₹500 is required for this booking."}
+              </p>
+            </div>
+          </div>
+
           {error && (
             <p className="rounded-lg bg-destructive/10 px-3 py-2 text-sm font-medium text-destructive">
               {error}
