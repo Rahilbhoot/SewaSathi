@@ -393,8 +393,10 @@ function OperationsSection() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);
+  const [assignBooking, setAssignBooking] = useState<Booking | null>(null);
 
-  useEffect(() => {
+  const fetchBookings = useCallback(() => {
+    setLoading(true);
     listBookings()
       .then((d) => setBookings(Array.isArray(d) ? d : []))
       .catch((err: unknown) =>
@@ -402,6 +404,10 @@ function OperationsSection() {
       )
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    fetchBookings();
+  }, [fetchBookings]);
 
   async function downloadInvoice(id: string) {
     setBusyId(id);
@@ -420,8 +426,9 @@ function OperationsSection() {
   const active = bookings.filter((b) => (b.status ?? "").toLowerCase() !== "cancelled");
 
   return (
-    <section className="space-y-4">
-      <div className="grid gap-3 sm:grid-cols-3">
+    <>
+      <section className="space-y-4">
+        <div className="grid gap-3 sm:grid-cols-3">
         <KPI label="Active bookings" value={active.length} icon={Activity} color="primary" />
         <KPI
           label="Completed"
@@ -452,7 +459,7 @@ function OperationsSection() {
                 <th className="px-4 py-3">Partner</th>
                 <th className="px-4 py-3">Address</th>
                 <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3 text-right">Invoice</th>
+                <th className="px-4 py-3 text-right">Action / Invoice</th>
               </tr>
             </thead>
             <tbody>
@@ -473,22 +480,32 @@ function OperationsSection() {
                     <StatusBadge status={b.status} />
                   </td>
                   <td className="px-4 py-3 text-right">
-                    {(b.status ?? "").toLowerCase() === "completed" ? (
-                      <button
-                        onClick={() => void downloadInvoice(b._id)}
-                        disabled={busyId === b._id}
-                        className="btn-outline px-3 py-1.5 text-xs"
-                      >
-                        {busyId === b._id ? (
-                          <Loader2 className="size-3.5 animate-spin" />
-                        ) : (
-                          <Download className="size-3.5" />
-                        )}
-                        PDF
-                      </button>
-                    ) : (
-                      <span className="text-xs text-muted-foreground">—</span>
-                    )}
+                    <div className="flex justify-end gap-2">
+                      {(b.status ?? "").toLowerCase() === "pending" && !b.worker && (
+                        <button
+                          onClick={() => setAssignBooking(b)}
+                          className="btn-primary px-3 py-1.5 text-xs"
+                        >
+                          Assign Partner
+                        </button>
+                      )}
+                      {(b.status ?? "").toLowerCase() === "completed" ? (
+                        <button
+                          onClick={() => void downloadInvoice(b._id)}
+                          disabled={busyId === b._id}
+                          className="btn-outline px-3 py-1.5 text-xs"
+                        >
+                          {busyId === b._id ? (
+                            <Loader2 className="size-3.5 animate-spin" />
+                          ) : (
+                            <Download className="size-3.5" />
+                          )}
+                          PDF
+                        </button>
+                      ) : (
+                        <span className="text-xs text-muted-foreground"></span>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -497,6 +514,105 @@ function OperationsSection() {
         </div>
       </div>
     </section>
+      {assignBooking && (
+        <AssignPartnerModal
+          booking={assignBooking}
+          onClose={() => setAssignBooking(null)}
+          onSuccess={() => {
+            setAssignBooking(null);
+            fetchBookings();
+          }}
+        />
+      )}
+    </>
+  );
+}
+
+function AssignPartnerModal({ booking, onClose, onSuccess }: { booking: Booking; onClose: () => void; onSuccess: () => void }) {
+  const [workers, setWorkers] = useState<Worker[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [assigningId, setAssigningId] = useState<string | null>(null);
+  const service = bookingService(booking);
+
+  useEffect(() => {
+    const coords = booking.customer?.location?.coordinates;
+    const lng = coords?.[0];
+    const lat = coords?.[1];
+
+    if (!lng || !lat) {
+      setError("Customer location is missing for this booking.");
+      setLoading(false);
+      return;
+    }
+
+    apiFetch<Worker[]>(`/workers/suggest?lng=${lng}&lat=${lat}&skill=${encodeURIComponent(service)}`)
+      .then((data) => {
+        setWorkers(Array.isArray(data) ? data : []);
+      })
+      .catch((err: unknown) => setError(err instanceof Error ? err.message : "Could not load suggestions"))
+      .finally(() => setLoading(false));
+  }, [booking, service]);
+
+  async function handleAssign(workerId: string) {
+    setAssigningId(workerId);
+    setError(null);
+    try {
+      await apiFetch(`/bookings/${booking._id}/assign`, {
+        method: "PATCH",
+        body: JSON.stringify({ workerId }),
+      });
+      onSuccess();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Assignment failed");
+      setAssigningId(null);
+    }
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 px-4 backdrop-blur-sm">
+      <div className="w-full max-w-lg rounded-2xl bg-card p-6 shadow-xl border border-border">
+        <h2 className="text-xl font-bold mb-4">Assign Partner</h2>
+        <p className="text-sm text-muted-foreground mb-4">
+          Suggesting partners for <strong>{service}</strong> based on location and minimum services done.
+        </p>
+
+        {error && <p className="mb-4 rounded-lg bg-destructive/10 px-3 py-2 text-sm text-destructive">{error}</p>}
+
+        <div className="max-h-[300px] overflow-y-auto pr-2 space-y-3">
+          {loading ? (
+            <Loading />
+          ) : workers.length === 0 ? (
+            <p className="text-sm text-muted-foreground text-center py-4">No available partners found.</p>
+          ) : (
+            workers.map((w) => (
+              <div key={w._id} className="flex items-center justify-between p-3 border border-border rounded-xl">
+                <div>
+                  <p className="font-bold text-sm">{w.name}</p>
+                  <p className="text-xs text-muted-foreground">{w.phone}</p>
+                  <p className="text-xs font-semibold text-primary mt-1">
+                    {w.weeklyBookings ?? 0} Services Done
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleAssign(w._id)}
+                  disabled={assigningId !== null}
+                  className="btn-primary px-3 py-1.5 text-xs"
+                >
+                  {assigningId === w._id ? <Loader2 className="size-3.5 animate-spin" /> : "Assign"}
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+
+        <div className="mt-6 flex justify-end">
+          <button onClick={onClose} className="btn-outline px-4 py-2">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
   );
 }
 

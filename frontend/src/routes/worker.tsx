@@ -11,6 +11,7 @@ import {
   Wallet,
   Star,
   Calendar,
+  Download,
 } from "lucide-react";
 import { useI18n } from "@/lib/i18n";
 import { useAuth } from "@/lib/auth";
@@ -161,6 +162,19 @@ function JobsTab() {
     }
   }
 
+  async function downloadInvoice(id: string) {
+    setBusyId(id);
+    try {
+      const { apiFetchBlob, downloadBlob } = await import("@/lib/api");
+      const blob = await apiFetchBlob(`/invoices/${id}`);
+      downloadBlob(blob, `sewasathi-invoice-${id}.pdf`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Invoice download failed");
+    } finally {
+      setBusyId(null);
+    }
+  }
+
   if (loading)
     return (
       <p className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -216,24 +230,40 @@ function JobsTab() {
                 <IndianRupee className="size-4" />
                 {job.amount ?? 500}
               </p>
-              {done ? (
-                <span className="inline-flex items-center gap-2 text-sm font-bold text-success">
-                  <CheckCircle2 className="size-4" /> {t("completed")}
-                </span>
-              ) : (
-                <button
-                  onClick={() => void complete(job._id)}
-                  disabled={busyId === job._id}
-                  className="btn-success w-full sm:w-auto"
-                >
-                  {busyId === job._id ? (
-                    <Loader2 className="size-4 animate-spin" />
-                  ) : (
-                    <CheckCircle2 className="size-4" />
-                  )}
-                  {t("markComplete")}
-                </button>
-              )}
+              <div className="flex items-center gap-2">
+                {done && (
+                  <button
+                    onClick={() => void downloadInvoice(job._id)}
+                    disabled={busyId === job._id}
+                    className="btn-outline px-3 py-1.5 text-xs h-[36px]"
+                  >
+                    {busyId === job._id ? (
+                      <Loader2 className="size-3.5 animate-spin" />
+                    ) : (
+                      <Download className="size-3.5" />
+                    )}
+                    Invoice
+                  </button>
+                )}
+                {done ? (
+                  <span className="inline-flex items-center gap-2 text-sm font-bold text-success ml-2">
+                    <CheckCircle2 className="size-4" /> {t("completed")}
+                  </span>
+                ) : (
+                  <button
+                    onClick={() => void complete(job._id)}
+                    disabled={busyId === job._id}
+                    className="btn-success w-full sm:w-auto h-[36px]"
+                  >
+                    {busyId === job._id ? (
+                      <Loader2 className="size-4 animate-spin" />
+                    ) : (
+                      <CheckCircle2 className="size-4" />
+                    )}
+                    {t("markComplete")}
+                  </button>
+                )}
+              </div>
             </div>
           </article>
         );

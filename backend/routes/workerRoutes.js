@@ -38,6 +38,34 @@ router.get('/nearby', async (req, res) => {
     }
 });
 
+router.get('/suggest', protect, authorize('admin'), async (req, res) => {
+    try {
+        const { lng, lat, skill, maxDistance = 15000 } = req.query;
+        if (!lng || !lat || !skill) {
+            return res.status(400).json({ error: 'lng, lat, and skill are required' });
+        }
+
+        const query = {
+            isVerified: true,
+            skills: skill.toLowerCase(),
+            location: {
+                $near: {
+                    $geometry: {
+                        type: "Point",
+                        coordinates: [parseFloat(lng), parseFloat(lat)]
+                    },
+                    $maxDistance: parseInt(maxDistance)
+                }
+            }
+        };
+
+        const workers = await Worker.find(query).sort({ weeklyBookings: 1 });
+        res.json(workers);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
 router.get('/', async (req, res) => {
     try {
         const workers = await Worker.find();

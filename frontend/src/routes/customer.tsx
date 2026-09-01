@@ -22,6 +22,7 @@ import { BookingModal } from "@/components/BookingModal";
 import { SahayakDrawer } from "@/components/SahayakDrawer";
 import { StatusBadge } from "@/components/StatusBadge";
 import { AppHeader } from "@/components/AppHeader";
+import { Download } from "lucide-react";
 
 export const Route = createFileRoute("/customer")({
   head: () => ({
@@ -62,6 +63,7 @@ function CustomerPortal() {
   const [error, setError] = useState<string | null>(null);
   const [modalService, setModalService] = useState<string | null>(null);
   const [chatOpen, setChatOpen] = useState(false);
+  const [busyId, setBusyId] = useState<string | null>(null);
 
   // Auth guard — redirect if not logged in or not a customer
   useEffect(() => {
@@ -86,6 +88,19 @@ function CustomerPortal() {
   useEffect(() => {
     if (user?.role === "customer") void load();
   }, [load, user]);
+
+  async function downloadInvoice(id: string) {
+    setBusyId(id);
+    try {
+      const { apiFetchBlob, downloadBlob } = await import("@/lib/api");
+      const blob = await apiFetchBlob(`/invoices/${id}`);
+      downloadBlob(blob, `sewasathi-invoice-${id}.pdf`);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Invoice download failed");
+    } finally {
+      setBusyId(null);
+    }
+  }
 
   if (!ready || !user) {
     return (
@@ -182,6 +197,20 @@ function CustomerPortal() {
                       <IndianRupee className="size-3" />
                       {b.amount ?? 500}
                     </span>
+                    {(b.status ?? "").toLowerCase() === "completed" && (
+                      <button
+                        onClick={() => void downloadInvoice(b._id)}
+                        disabled={busyId === b._id}
+                        className="btn-outline px-2 py-1 text-xs mt-1"
+                      >
+                        {busyId === b._id ? (
+                          <Loader2 className="size-3.5 animate-spin" />
+                        ) : (
+                          <Download className="size-3.5" />
+                        )}
+                        Invoice
+                      </button>
+                    )}
                   </div>
                 </li>
               ))}
