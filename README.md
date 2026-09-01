@@ -74,7 +74,7 @@ Unlike private gig platforms, the cooperative itself is the platform owner. Reve
 
 ## 🛠️ Tech Stack
 
-**Frontend (Mobile App):** Flutter / React Native — single codebase for customer & worker roles
+**Frontend (Mobile App):** React Native — single codebase for customer & worker roles
 **Admin Dashboard (Web):** React.js
 **Backend:** Node.js/Express (or Django REST Framework)
 **Database:** PostgreSQL with PostGIS extension (or MongoDB with geospatial indexing)
