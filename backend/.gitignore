@@ -1,2 +1,6 @@
 node_modules/
 .env
+
+# Project docs and implementation notes
+../IMPLEMENTATION_ANALYSIS.md
+../QUICK_START_GUIDE.md
